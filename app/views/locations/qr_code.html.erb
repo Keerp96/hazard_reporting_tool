@@ -1,0 +1,17 @@
+<% content_for(:title, "QR Code - #{@location.name} - HazardTracker") %>
+
+<div class="row justify-content-center">
+  <div class="col-md-6 text-center">
+    <div class="card border-0 shadow-sm">
+      <div class="card-body">
+        <h4><%= @location.name %></h4>
+        <p class="text-muted">Scan to report a hazard at this location</p>
+        <div class="my-4"><%= raw @svg %></div>
+        <div class="d-flex justify-content-center gap-2">
+          <%= link_to "Back to Locations", locations_path, class: "btn btn-outline-secondary" %>
+          <%= link_to "Test Report Link", new_report_path(location: @location.name), class: "btn btn-primary" %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

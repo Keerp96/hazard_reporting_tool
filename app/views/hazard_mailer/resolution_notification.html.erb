@@ -1,0 +1,13 @@
+<h2>Your Hazard Report Has Been Resolved</h2>
+
+<p>Good news! The hazard report you submitted has been resolved:</p>
+
+<table>
+  <tr><td><strong>Title:</strong></td><td><%= @report.title %></td></tr>
+  <tr><td><strong>Location:</strong></td><td><%= @report.location %></td></tr>
+  <tr><td><strong>Resolved by:</strong></td><td><%= @report.assignee&.full_name || "—" %></td></tr>
+</table>
+
+<p>Thank you for reporting this hazard and helping maintain a safe workplace.</p>
+
+<p><%= link_to "View Report", report_url(@report) %></p>

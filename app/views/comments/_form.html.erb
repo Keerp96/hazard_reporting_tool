@@ -1,0 +1,11 @@
+<%= form_with(model: [report, comment], id: "comment_form", class: "d-flex gap-2") do |f| %>
+  <div class="flex-grow-1">
+    <%= f.text_area :body, class: "form-control #{'is-invalid' if comment.errors[:body].any?}", rows: 2, placeholder: "Add a comment..." %>
+    <% if comment.errors[:body].any? %>
+      <div class="invalid-feedback"><%= comment.errors[:body].first %></div>
+    <% end %>
+  </div>
+  <div>
+    <%= f.submit "Post", class: "btn btn-primary" %>
+  </div>
+<% end %>

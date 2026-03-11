@@ -1,2 +1,39 @@
 @import 'bootstrap/scss/bootstrap';
 @import 'bootstrap-icons/font/bootstrap-icons';
+
+// Custom styles for HazardTracker
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.bg-orange {
+  background-color: #fd7e14 !important;
+  color: white;
+}
+
+.badge.bg-orange {
+  background-color: #fd7e14 !important;
+}
+
+// Improve table row hover states
+.table-hover tbody tr:hover {
+  cursor: pointer;
+}
+
+// Kaminari pagination Bootstrap 5 styling
+nav.pagination {
+  display: flex;
+  justify-content: center;
+  padding: 1rem 0;
+
+  .page-item {
+    .page-link {
+      color: #0d6efd;
+    }
+    &.active .page-link {
+      background-color: #0d6efd;
+      border-color: #0d6efd;
+    }
+  }
+}

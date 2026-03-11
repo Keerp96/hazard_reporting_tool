@@ -1,0 +1,65 @@
+<%= form_with(model: report, html: { class: "needs-validation" }) do |f| %>
+  <% if report.errors.any? %>
+    <div class="alert alert-danger">
+      <h6 class="alert-heading"><%= pluralize(report.errors.count, "error") %> prevented this report from being saved:</h6>
+      <ul class="mb-0">
+        <% report.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="mb-3">
+    <%= f.label :title, class: "form-label fw-semibold" %>
+    <%= f.text_field :title, class: "form-control", placeholder: "Brief hazard title (e.g., 'Slippery floor in kitchen')", required: true, maxlength: 200 %>
+  </div>
+
+  <div class="mb-3">
+    <%= f.label :description, class: "form-label fw-semibold" %>
+    <%= f.text_area :description, class: "form-control", rows: 5, placeholder: "Describe the hazard in detail. Include what you observed, potential risks, and any immediate actions taken.", required: true %>
+  </div>
+
+  <div class="row g-3 mb-3">
+    <div class="col-md-6">
+      <%= f.label :location, class: "form-label fw-semibold" %>
+      <%= f.text_field :location, class: "form-control", list: "location-options", placeholder: "Type or select a location", required: true %>
+      <datalist id="location-options">
+        <% locations.each do |loc| %>
+          <option value="<%= loc.name %>">
+        <% end %>
+      </datalist>
+    </div>
+    <div class="col-md-6" data-controller="severity-highlight">
+      <%= f.label :severity, class: "form-label fw-semibold" %>
+      <%= f.select :severity, Report.severities.keys.map { |s| [s.titleize, s] }, { prompt: "Select severity..." }, class: "form-select", required: true, data: { severity_highlight_target: "select", action: "change->severity-highlight#highlight" } %>
+    </div>
+  </div>
+
+  <div class="row g-3 mb-3">
+    <div class="col-md-6">
+      <%= f.label :reported_at, "Date & Time Observed", class: "form-label fw-semibold" %>
+      <%= f.datetime_local_field :reported_at, class: "form-control", required: true %>
+    </div>
+  </div>
+
+  <div class="mb-3" data-controller="photo-preview">
+    <%= f.label :photo, "Photo Evidence (optional)", class: "form-label fw-semibold" %>
+    <%= f.file_field :photo, class: "form-control", accept: "image/png,image/jpeg,image/webp", data: { photo_preview_target: "input", action: "change->photo-preview#preview" } %>
+    <div class="form-text">Max 5MB. Accepted formats: PNG, JPEG, WebP.</div>
+    <div class="mt-2" data-photo-preview-target="container">
+      <% if report.photo.attached? %>
+        <%= image_tag report.photo, class: "img-thumbnail", style: "max-height: 200px;" %>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="d-flex gap-2">
+    <%= f.submit report.persisted? ? "Update Report" : "Submit Report", class: "btn btn-primary" %>
+    <% if report.persisted? %>
+      <%= link_to "Cancel", report_path(report), class: "btn btn-outline-secondary" %>
+    <% else %>
+      <%= link_to "Cancel", reports_path, class: "btn btn-outline-secondary" %>
+    <% end %>
+  </div>
+<% end %>

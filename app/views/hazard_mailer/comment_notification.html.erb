@@ -1,0 +1,9 @@
+<h2>New Comment on Hazard Report</h2>
+
+<p><strong><%= @comment.user.full_name %></strong> commented on report "<%= @report.title %>":</p>
+
+<blockquote style="border-left: 3px solid #ccc; padding-left: 10px; margin-left: 0;">
+  <p><%= @comment.body %></p>
+</blockquote>
+
+<p><%= link_to "View Report", report_url(@report) %></p>

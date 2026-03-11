@@ -40,6 +40,38 @@ gem "thruster", require: false
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
 gem "image_processing", "~> 1.2"
 
+# Authentication
+gem "devise"
+
+# Authorization
+gem "pundit"
+
+# State machine for report workflow
+gem "aasm"
+
+# Pagination
+gem "kaminari"
+
+# Search and filtering
+gem "ransack"
+
+# Charts for dashboard
+gem "chartkick"
+gem "groupdate"
+
+# QR code generation
+gem "rqrcode"
+
+# CSV export (removed from default gems in Ruby 3.4)
+gem "csv"
+
+# PDF export
+gem "prawn"
+gem "prawn-table"
+
+# Active Storage file validations
+gem "active_storage_validations"
+
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "debug", platforms: %i[ mri windows ], require: "debug/prelude"
@@ -52,11 +84,20 @@ group :development, :test do
 
   # Omakase Ruby styling [https://github.com/rails/rubocop-rails-omakase/]
   gem "rubocop-rails-omakase", require: false
+
+  # RSpec testing
+  gem "rspec-rails"
+  gem "factory_bot_rails"
+  gem "faker"
+  gem "shoulda-matchers"
 end
 
 group :development do
   # Use console on exceptions pages [https://github.com/rails/web-console]
   gem "web-console"
+
+  # Preview emails in browser
+  gem "letter_opener"
 end
 
 group :test do

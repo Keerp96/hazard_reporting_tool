@@ -1,0 +1,186 @@
+<% content_for(:title, "Dashboard - HazardTracker") %>
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h1 class="h3 mb-0">
+    <% if current_user.supervisor? %>
+      Supervisor Dashboard
+    <% else %>
+      My Dashboard
+    <% end %>
+  </h1>
+  <%= link_to "New Report", new_report_path, class: "btn btn-primary" %>
+</div>
+
+<% if current_user.supervisor? %>
+  <!-- Traffic Light & Key Metrics -->
+  <div class="row g-3 mb-4">
+    <div class="col-md-3">
+      <div class="card border-0 shadow-sm h-100">
+        <div class="card-body text-center">
+          <% light_class = { green: "success", yellow: "warning", red: "danger" }[@traffic_light] %>
+          <div class="rounded-circle bg-<%= light_class %> d-inline-flex align-items-center justify-content-center mb-2" style="width: 80px; height: 80px;">
+            <span class="text-white fs-3 fw-bold"><%= @open_count %></span>
+          </div>
+          <h6 class="card-title text-muted">Open Hazards</h6>
+          <small class="text-muted">
+            <% if @traffic_light == :green %>Under control<% elsif @traffic_light == :yellow %>Needs attention<% else %>Critical<% end %>
+          </small>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card border-0 shadow-sm h-100">
+        <div class="card-body text-center">
+          <div class="display-6 fw-bold text-primary mb-2"><%= @total_reports %></div>
+          <h6 class="card-title text-muted">Total Reports</h6>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card border-0 shadow-sm h-100">
+        <div class="card-body text-center">
+          <div class="display-6 fw-bold text-info mb-2"><%= @reports_this_month %></div>
+          <h6 class="card-title text-muted">Reports This Month</h6>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card border-0 shadow-sm h-100">
+        <div class="card-body text-center">
+          <div class="display-6 fw-bold text-success mb-2"><%= @resolution_rate %>%</div>
+          <h6 class="card-title text-muted">Resolution Rate</h6>
+          <small class="text-muted">This month</small>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Charts Row -->
+  <div class="row g-3 mb-4">
+    <div class="col-md-4">
+      <div class="card border-0 shadow-sm h-100">
+        <div class="card-header bg-white fw-semibold">Hazards by Severity</div>
+        <div class="card-body">
+          <%= pie_chart @reports_by_severity, colors: ["#198754", "#ffc107", "#fd7e14", "#dc3545"], legend: :bottom %>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card border-0 shadow-sm h-100">
+        <div class="card-header bg-white fw-semibold">Hazards by Location</div>
+        <div class="card-body">
+          <%= bar_chart @reports_by_location, colors: ["#0d6efd"] %>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card border-0 shadow-sm h-100">
+        <div class="card-header bg-white fw-semibold">Reports Over Time (30 Days)</div>
+        <div class="card-body">
+          <%= line_chart @reports_over_time, colors: ["#0d6efd"] %>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Recent Reports -->
+  <div class="card border-0 shadow-sm">
+    <div class="card-header bg-white d-flex justify-content-between align-items-center">
+      <span class="fw-semibold">Recent Reports</span>
+      <%= link_to "View All", reports_path, class: "btn btn-outline-primary btn-sm" %>
+    </div>
+    <div class="card-body p-0">
+      <div class="table-responsive">
+        <table class="table table-hover mb-0">
+          <thead class="table-light">
+            <tr>
+              <th>#</th>
+              <th>Title</th>
+              <th>Severity</th>
+              <th>Status</th>
+              <th>Reporter</th>
+              <th>Date</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @recent_reports.each do |report| %>
+              <tr class="cursor-pointer" onclick="window.location='<%= report_path(report) %>'">
+                <td><%= report.id %></td>
+                <td><%= report.title %></td>
+                <td><span class="badge bg-<%= report.severity_color %>"><%= report.severity.titleize %></span></td>
+                <td><span class="badge bg-<%= report.status_color %>"><%= report.status.titleize %></span></td>
+                <td><%= report.reporter.full_name %></td>
+                <td><%= report.reported_at.strftime("%b %d, %Y") %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+<% else %>
+  <!-- Employee View -->
+  <div class="row g-3 mb-4">
+    <div class="col-md-4">
+      <div class="card border-0 shadow-sm h-100">
+        <div class="card-body text-center">
+          <div class="display-6 fw-bold text-primary mb-2"><%= @my_total %></div>
+          <h6 class="card-title text-muted">My Total Reports</h6>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card border-0 shadow-sm h-100">
+        <div class="card-body text-center">
+          <div class="display-6 fw-bold text-warning mb-2"><%= @my_open_count %></div>
+          <h6 class="card-title text-muted">My Open Reports</h6>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card border-0 shadow-sm h-100">
+        <div class="card-body text-center">
+          <div class="display-6 fw-bold text-success mb-2"><%= @my_resolved %></div>
+          <h6 class="card-title text-muted">My Resolved Reports</h6>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card border-0 shadow-sm">
+    <div class="card-header bg-white d-flex justify-content-between align-items-center">
+      <span class="fw-semibold">My Recent Reports</span>
+      <%= link_to "View All", reports_path, class: "btn btn-outline-primary btn-sm" %>
+    </div>
+    <div class="card-body p-0">
+      <div class="table-responsive">
+        <table class="table table-hover mb-0">
+          <thead class="table-light">
+            <tr>
+              <th>#</th>
+              <th>Title</th>
+              <th>Severity</th>
+              <th>Status</th>
+              <th>Date</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @my_reports.each do |report| %>
+              <tr class="cursor-pointer" onclick="window.location='<%= report_path(report) %>'">
+                <td><%= report.id %></td>
+                <td><%= report.title %></td>
+                <td><span class="badge bg-<%= report.severity_color %>"><%= report.severity.titleize %></span></td>
+                <td><span class="badge bg-<%= report.status_color %>"><%= report.status.titleize %></span></td>
+                <td><%= report.reported_at.strftime("%b %d, %Y") %></td>
+              </tr>
+            <% end %>
+            <% if @my_reports.empty? %>
+              <tr><td colspan="5" class="text-center text-muted py-4">No reports yet. <%= link_to "Create your first report", new_report_path %>.</td></tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+<% end %>
