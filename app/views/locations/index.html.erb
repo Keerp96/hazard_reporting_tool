@@ -13,12 +13,14 @@
           <%
             qr_url = new_report_url(location: location.name)
             qr = RQRCode::QRCode.new(qr_url)
-            svg = qr.as_svg(color: "000", shape_rendering: "crispEdges", module_size: 4, standalone: false, use_path: true)
+            svg = qr.as_svg(color: "000", shape_rendering: "crispEdges", module_size: 3, standalone: true, use_path: true)
           %>
-          <div class="mb-3"><%= raw svg %></div>
+          <%= link_to qr_code_location_path(location), class: "d-block mb-3 cursor-pointer" do %>
+            <div style="max-width: 200px; margin: 0 auto;"><%= raw svg %></div>
+          <% end %>
           <div class="d-grid gap-2">
-            <%= link_to "Download SVG", qr_code_location_path(location, format: :svg), class: "btn btn-outline-primary btn-sm" %>
-            <%= link_to "Test Link", new_report_path(location: location.name), class: "btn btn-outline-secondary btn-sm" %>
+            <%= link_to "View Full Size", qr_code_location_path(location), class: "btn btn-outline-primary btn-sm" %>
+            <%= link_to "Download SVG", qr_code_location_path(location, format: :svg), class: "btn btn-outline-secondary btn-sm" %>
           </div>
         </div>
       </div>

@@ -47,11 +47,9 @@
               <li class="nav-item">
                 <%= link_to "New Report", new_report_path, class: "nav-link" %>
               </li>
-              <% if current_user.supervisor? %>
-                <li class="nav-item">
-                  <%= link_to "QR Codes", locations_path, class: "nav-link #{'active' if controller_name == 'locations'}" %>
-                </li>
-              <% end %>
+              <li class="nav-item">
+                <%= link_to "QR Codes", locations_path, class: "nav-link #{'active' if controller_name == 'locations'}" %>
+              </li>
             </ul>
 
             <ul class="navbar-nav">
