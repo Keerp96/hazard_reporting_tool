@@ -81,7 +81,7 @@
   </div>
   <% if @reports.total_pages.to_i > 1 %>
     <div class="card-footer bg-white">
-      <%= paginate @reports, theme: 'bootstrap-5' %>
+      <%= paginate @reports %>
     </div>
   <% end %>
 </div>
